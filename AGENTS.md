@@ -33,3 +33,4 @@ use the editor.
 - Clinic content lives in src/data/site.ts as `{ro, ru}` pairs. Why: single source for both languages.
 - Header and footer share the uploaded logo through the Logo component; the favicon uses its medical symbol. Why: keep clinic branding consistent across placements.
 - Booking doctor identities and explicit service assignments live in site data; filter by these assignments and clear the selection on service changes. Why: prevent unrelated or stale doctor preferences.
+- Shared Section entrances use a one-shot IntersectionObserver with visible content by default; CSS motion respects reduced-motion preferences. Why: animate progressively without hiding content when scripts or motion are unavailable.
