@@ -20,6 +20,8 @@
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
   --color-primary-foreground: var(--primary-foreground);
+  --color-action: var(--action);
+  --color-action-hover: var(--action-hover);
   --color-tint: var(--tint);
   --color-surface: var(--surface);
   --color-secondary: var(--secondary);
@@ -38,28 +40,30 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.27 0.025 205);
+  --foreground: #172b42;
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.27 0.025 205);
+  --card-foreground: var(--foreground);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.27 0.025 205);
-  --primary: oklch(0.64 0.11 195);
-  --primary-dark: oklch(0.54 0.095 197);
+  --popover-foreground: var(--foreground);
+  --primary: #006eb5;
+  --primary-dark: #073b70;
   --primary-foreground: oklch(1 0 0);
-  --tint: oklch(0.9 0.03 197);
-  --surface: oklch(0.977 0.002 197);
-  --secondary: oklch(0.977 0.002 197);
-  --secondary-foreground: oklch(0.27 0.025 205);
-  --muted: oklch(0.977 0.002 197);
-  --muted-foreground: oklch(0.58 0.012 240);
-  --accent: oklch(0.95 0.02 197);
-  --accent-foreground: oklch(0.54 0.095 197);
+  --action: #d9000d;
+  --action-hover: #b9000b;
+  --tint: #e9f3fb;
+  --surface: #f6f8fa;
+  --secondary: var(--surface);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--surface);
+  --muted-foreground: #596a7a;
+  --accent: #edf5fc;
+  --accent-foreground: var(--primary-dark);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.006 200);
-  --input: oklch(0.9 0.008 200);
-  --ring: oklch(0.64 0.11 195);
-  --shadow-soft: 0 6px 24px -12px oklch(0.27 0.025 205 / 0.18);
+  --border: #dde5ed;
+  --input: #ced9e4;
+  --ring: var(--primary);
+  --shadow-soft: 0 6px 24px -12px rgb(7 59 112 / 0.18);
 }
 
 @layer base {
@@ -85,9 +89,9 @@
 @utility btn-primary {
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
   border-radius: .5rem; padding: .75rem 1.25rem; font-weight: 600; font-size: .875rem;
-  background: var(--primary-dark); color: var(--primary-foreground);
+  background: var(--action); color: var(--primary-foreground);
   transition: background-color .2s ease;
-  &:hover { background: var(--primary); }
+  &:hover { background: var(--action-hover); }
 }
 
 @utility btn-outline {
@@ -101,9 +105,9 @@
 @utility btn-light {
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
   border-radius: .5rem; padding: .75rem 1.25rem; font-weight: 600; font-size: .875rem;
-  background: var(--background); color: var(--primary-dark);
+  background: var(--action); color: var(--primary-foreground);
   transition: background-color .2s ease;
-  &:hover { background: var(--tint); }
+  &:hover { background: var(--action-hover); }
 }
 
 @utility btn-ghost-light {
