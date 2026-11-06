@@ -1,6 +1,6 @@
 import { CheckCircle2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import { CLINIC, diagnostics, specialties } from "@/data/site";
+import { CLINIC, diagnostics, doctors, specialties } from "@/data/site";
 import { useT } from "@/lib/i18n";
 
 export function BookingForm({ defaultService = "" }: { defaultService?: string }) {
@@ -49,6 +49,15 @@ export function BookingForm({ defaultService = "" }: { defaultService?: string }
       <label className="grid gap-1.5 text-sm font-medium">
         {ru ? "Желаемая дата" : "Data dorită"}
         <input required name="date" type="date" className="field" />
+      </label>
+      <label className="grid gap-1.5 text-sm font-medium md:col-span-2">
+        {ru ? "Врач (необязательно)" : "Medic (opțional)"}
+        <select name="doctor" defaultValue="" className="field">
+          <option value="">{ru ? "Без предпочтений" : "Fără preferință"}</option>
+          {doctors.map((doctor) => (
+            <option key={doctor.id} value={doctor.id}>{t(doctor.title)}</option>
+          ))}
+        </select>
       </label>
       <button type="submit" className="btn-primary md:col-span-2">
         {ru ? "Отправить заявку" : "Trimite cererea"}
