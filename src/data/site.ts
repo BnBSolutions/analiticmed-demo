@@ -203,6 +203,18 @@ export const specialties: { slug: string; name: L }[] = [
 
 export type Doctor = { id: string; title: L; spec: string; photo: string; alt: L };
 
+/** Demonstration identities and service assignments; replace with the clinic's real roster. */
+export const bookingDoctors = [
+  { id: "d1", name: { ro: "Ion Vasilescu", ru: "Ион Василеску" }, services: ["cardiologie"] },
+  { id: "d2", name: { ro: "Andrei Popescu", ru: "Андрей Попеску" }, services: ["imagistica", "rmn", "tomografie-computerizata", "radiografie-digitala", "ecografie", "osteodensitometrie"] },
+  { id: "d3", name: { ro: "Elena Rusu", ru: "Елена Русу" }, services: ["pediatrie"] },
+  { id: "d4", name: { ro: "Mihai Ciobanu", ru: "Михай Чобану" }, services: ["neurologie", "electroencefalografie"] },
+  { id: "d5", name: { ro: "Ana Munteanu", ru: "Ана Мунтяну" }, services: ["ginecologie"] },
+  { id: "d6", name: { ro: "Victor Ceban", ru: "Виктор Чебан" }, services: ["gastroenterologie"] },
+  { id: "d7", name: { ro: "Maria Rotaru", ru: "Мария Ротару" }, services: ["endocrinologie"] },
+  { id: "d8", name: { ro: "Sergiu Moraru", ru: "Серджиу Морару" }, services: ["urologie"] },
+];
+
 /** Doctor names are not yet supplied by the clinic; cards show the role. */
 export const doctors: Doctor[] = [
   { id: "d1", title: { ro: "Medic cardiolog", ru: "Врач-кардиолог" }, spec: "cardiologie", photo: doctor1, alt: { ro: "Medic cardiolog AnaliticMed în halat alb cu stetoscop", ru: "Врач-кардиолог AnaliticMed в белом халате со стетоскопом" } },
