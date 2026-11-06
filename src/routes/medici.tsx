@@ -4,8 +4,8 @@ import { langOf, seo, useT } from "@/lib/i18n";
 import { PageHeader, Section } from "@/components/site/ui";
 
 export const Route = createFileRoute("/medici")({
-  validateSearch: (s: Record<string, unknown>): { spec?: string } =>
-    typeof s.spec === "string" ? { spec: s.spec } : {},
+  validateSearch: (s: Record<string, unknown>): { spec?: string | undefined } =>
+    typeof s["spec"] === "string" ? { spec: s["spec"] } : {},
   head: ({ match }) => {
     const lang = langOf(match.search);
     return seo(match.search, "/medici", {

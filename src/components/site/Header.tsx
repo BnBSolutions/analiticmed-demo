@@ -126,7 +126,7 @@ function SiteSearch() {
     if (s.length < 2) return [];
     const items = [
       ...diagnostics.map((d) => ({ label: t(d.name), go: () => navigate({ to: "/servicii/$slug", params: { slug: d.slug } }) })),
-      ...specialties.map((sp) => ({ label: t(sp.name), go: () => navigate({ to: "/medici", search: { spec: sp.slug, lang: lang === "ru" ? "ru" : undefined } }) })),
+      ...specialties.map((sp) => ({ label: t(sp.name), go: () => navigate({ to: "/medici", search: { spec: sp.slug } }) })),
       { label: ui.lab, go: () => navigate({ to: "/laborator" }) },
       { label: ui.homeTests, go: () => navigate({ to: "/laborator" }) },
       { label: ui.checkup, go: () => navigate({ to: "/check-up" }) },

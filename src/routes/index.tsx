@@ -36,7 +36,7 @@ function Index() {
             { icon: Home, label: ui.homeTests, to: "/laborator" as const, hash: "domiciliu" },
             { icon: FileText, label: ru ? "Результаты анализов" : "Rezultatele analizelor", to: "/ghidul-pacientului" as const, hash: "rezultate" },
           ].map((a) => (
-            <Link key={a.label} to={a.to} hash={a.hash} className="group flex items-center gap-3 rounded-lg p-3 transition hover:bg-accent">
+            <Link key={a.label} to={a.to} {...(a.hash ? { hash: a.hash } : {})} className="group flex items-center gap-3 rounded-lg p-3 transition hover:bg-accent">
               <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-tint text-primary-dark"><a.icon className="size-5" /></span>
               <span className="text-sm font-semibold leading-tight">{a.label}</span>
             </Link>
@@ -187,7 +187,7 @@ function Hero() {
     const id = setInterval(() => setI((x) => (x + 1) % slides.length), 7000);
     return () => clearInterval(id);
   }, [slides.length]);
-  const s = slides[i];
+  const s = slides[i]!;
   return (
     <section className="container-site pt-4 md:pt-6">
       <div className="grid overflow-hidden rounded-2xl bg-primary text-primary-foreground md:grid-cols-2">

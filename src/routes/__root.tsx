@@ -97,8 +97,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>): { lang?: "ru" } =>
-    s.lang === "ru" ? { lang: "ru" } : {},
+  validateSearch: (s: Record<string, unknown>): { lang?: "ru" | undefined } =>
+    s["lang"] === "ru" ? { lang: "ru" } : {},
   search: { middlewares: [retainSearchParams(["lang"])] },
   shellComponent: RootShell,
   component: RootComponent,
