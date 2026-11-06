@@ -1,26 +1,18 @@
-# Screenshot To Spark
+# AnaliticMed – Demo version
 
-Implement exactly the screenshot and nothing else
+Website redesign for Clinica Medicală AnaliticMed (analiticmed.md), Bălți.
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://screenshot-to-spark-3868.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/887e6ad3-9899-446c-a836-b8557a6ab547).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Developed by BNB Innovate.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+```sh
+bun install
+bun run dev
+```
+
+## Build
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+bun run build
 ```
