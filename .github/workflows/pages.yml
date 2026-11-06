@@ -1,0 +1,67 @@
+name: Deploy demo to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build static site
+        run: bun run build
+        env:
+          GH_PAGES_BASE: /${{ github.event.repository.name }}/
+          NITRO_PRESET: node-server
+
+      - name: Prepare static output
+        run: |
+          set -e
+          SHELL_FILE=$(find . -path ./node_modules -prune -o -name "_shell.html" -print | head -1)
+          if [ -z "$SHELL_FILE" ]; then
+            echo "SPA shell not found. HTML files produced:"
+            find . -path ./node_modules -prune -o -name "*.html" -print
+            exit 1
+          fi
+          OUT=$(dirname "$SHELL_FILE")
+          echo "Static output: $OUT"
+          cp "$SHELL_FILE" "$OUT/index.html"
+          cp "$SHELL_FILE" "$OUT/404.html"
+          touch "$OUT/.nojekyll"
+          # Logo is stored on the hosted asset store; copy it into the static site.
+          LOGO_URL=$(node -p "require('./src/assets/analiticmed-logo.png.asset.json').url")
+          mkdir -p "$OUT$(dirname "$LOGO_URL")"
+          curl -fsSL "https://screenshot-to-spark-3868.lovable.app$LOGO_URL" -o "$OUT$LOGO_URL" \
+            || echo "::warning::Logo download failed"
+          echo "OUT=$OUT" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ env.OUT }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

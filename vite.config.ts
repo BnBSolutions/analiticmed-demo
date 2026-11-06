@@ -6,10 +6,16 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// Set only by the GitHub Pages workflow (.github/workflows/pages.yml) to build a static
+// demo under /<repo-name>/. Normal builds (Lovable, local) are unaffected.
+const ghPagesBase = process.env.GH_PAGES_BASE;
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    ...(ghPagesBase ? { spa: { enabled: true } } : {}),
   },
+  ...(ghPagesBase ? { vite: { base: ghPagesBase } } : {}),
 });

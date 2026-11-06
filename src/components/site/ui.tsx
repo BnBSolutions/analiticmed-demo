@@ -6,7 +6,7 @@ import logoAsset from "@/assets/analiticmed-logo.png.asset.json";
 export function Logo() {
   return (
     <Link to="/" className="flex shrink-0 items-center" aria-label="AnaliticMed">
-      <img src={logoAsset.url} alt="AnaliticMed" width={1730} height={425} className="h-auto w-44 object-contain sm:w-52" />
+      <img src={import.meta.env.BASE_URL.replace(/\/$/, "") + logoAsset.url} alt="AnaliticMed" width={1730} height={425} className="h-auto w-44 object-contain sm:w-52" />
     </Link>
   );
 }
