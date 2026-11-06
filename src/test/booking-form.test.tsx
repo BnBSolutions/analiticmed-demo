@@ -23,4 +23,22 @@ describe("Optional booking doctor", () => {
     expect(new FormData(form).get("doctor")).toBe("d1");
     expect(form.checkValidity()).toBe(true);
   });
+  it("offers named doctors only for the selected service and clears an earlier choice", () => {
+    const { getByLabelText } = render(<BookingForm />);
+    const service = getByLabelText("Specialitate / serviciu");
+    const doctor = getByLabelText("Medic (opțional)") as HTMLSelectElement;
+    expect(doctor.disabled).toBe(true);
+    fireEvent.change(service, { target: { value: "cardiologie" } });
+    expect(Array.from(doctor.options).map((o) => o.value)).toEqual(["", "d1"]);
+    expect(doctor.options[1]?.text).toContain("Ion Vasilescu");
+    fireEvent.change(doctor, { target: { value: "d1" } });
+    fireEvent.change(service, { target: { value: "neurologie" } });
+    expect(doctor.value).toBe("");
+    expect(Array.from(doctor.options).map((o) => o.value)).toEqual(["", "d4"]);
+  });
+  it("uses the preset diagnostic service to offer its assigned doctor", () => {
+    const { getByLabelText } = render(<BookingForm defaultService="rmn" />);
+    const doctor = getByLabelText("Medic (opțional)") as HTMLSelectElement;
+    expect(Array.from(doctor.options).map((o) => o.value)).toEqual(["", "d2"]);
+  });
 });

@@ -1,12 +1,15 @@
 import { CheckCircle2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
-import { CLINIC, diagnostics, doctors, specialties } from "@/data/site";
+import { CLINIC, diagnostics, bookingDoctors, specialties } from "@/data/site";
 import { useT } from "@/lib/i18n";
 
 export function BookingForm({ defaultService = "" }: { defaultService?: string }) {
   const { t, lang } = useT();
   const ru = lang === "ru";
   const [sent, setSent] = useState(false);
+  const [service, setService] = useState(defaultService);
+  const [doctorId, setDoctorId] = useState("");
+  const availableDoctors = bookingDoctors.filter((doctor) => doctor.services.includes(service));
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     setSent(true);
@@ -34,7 +37,7 @@ export function BookingForm({ defaultService = "" }: { defaultService?: string }
       </label>
       <label className="grid gap-1.5 text-sm font-medium">
         {ru ? "Специальность / услуга" : "Specialitate / serviciu"}
-        <select required name="service" defaultValue={defaultService} className="field">
+        <select required name="service" value={service} onChange={(e) => { setService(e.target.value); setDoctorId(""); }} className="field">
           <option value="" disabled>{ru ? "Выберите" : "Alegeți"}</option>
           <optgroup label={ru ? "Диагностика" : "Diagnostică"}>
             {diagnostics.map((d) => <option key={d.slug} value={d.slug}>{t(d.name)}</option>)}
@@ -52,10 +55,10 @@ export function BookingForm({ defaultService = "" }: { defaultService?: string }
       </label>
       <label className="grid gap-1.5 text-sm font-medium md:col-span-2">
         {ru ? "Врач (необязательно)" : "Medic (opțional)"}
-        <select name="doctor" defaultValue="" className="field">
-          <option value="">{ru ? "Без предпочтений" : "Fără preferință"}</option>
-          {doctors.map((doctor) => (
-            <option key={doctor.id} value={doctor.id}>{t(doctor.title)}</option>
+        <select name="doctor" value={doctorId} onChange={(e) => setDoctorId(e.target.value)} disabled={!service || availableDoctors.length === 0} className="field disabled:opacity-60">
+          <option value="">{!service ? (ru ? "Сначала выберите услугу" : "Alegeți mai întâi serviciul") : availableDoctors.length === 0 ? (ru ? "Без предпочтений — список врачей пока недоступен" : "Fără preferință — lista medicilor nu este disponibilă încă") : (ru ? "Без предпочтений" : "Fără preferință")}</option>
+          {availableDoctors.map((doctor) => (
+            <option key={doctor.id} value={doctor.id}>{t(doctor.name)} {ru ? "(пример)" : "(exemplu)"}</option>
           ))}
         </select>
       </label>
