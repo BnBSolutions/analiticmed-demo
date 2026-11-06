@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import logoAsset from "@/assets/analiticmed-logo.png.asset.json";
 
 export function Logo() {
@@ -12,8 +12,22 @@ export function Logo() {
 }
 
 export function Section({ children, alt = false, id }: { children: ReactNode; alt?: boolean; id?: string }) {
+  const ref = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const section = ref.current;
+    if (!section || !('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) {
+        setRevealed(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <section id={id} className={`py-14 md:py-20 ${alt ? "bg-surface" : ""}`}>
+    <section ref={ref} id={id} data-revealed={revealed} className={`section-motion py-14 md:py-20 ${alt ? "bg-surface" : ""}`}>
       <div className="container-site">{children}</div>
     </section>
   );
