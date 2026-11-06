@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+- Language is a `?lang=ru` search param (Romanian default), retained by the root route's search middleware; every route's head uses `seo()` from src/lib/i18n.ts for hreflang + unique meta. Why: one route tree serves both languages with crawlable URLs.
+- Clinic content lives in src/data/site.ts as `{ro, ru}` pairs. Why: single source for both languages.

@@ -98,7 +98,6 @@ export function Header() {
           </div>
         </div>
       )}
-      <span className="sr-only">{lang}</span>
     </header>
   );
 }
