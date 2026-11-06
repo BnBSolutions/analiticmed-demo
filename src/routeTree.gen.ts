@@ -10,33 +10,154 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckUpRouteImport } from './routes/check-up'
+import { Route as ContacteRouteImport } from './routes/contacte'
+import { Route as DespreClinicaRouteImport } from './routes/despre-clinica'
+import { Route as GhidulPacientuluiRouteImport } from './routes/ghidul-pacientului'
+import { Route as LaboratorRouteImport } from './routes/laborator'
+import { Route as MediciRouteImport } from './routes/medici'
+import { Route as NoutatiRouteImport } from './routes/noutati'
+import { Route as ServiciiIndexRouteImport } from './routes/servicii.index'
+import { Route as ServiciiSlugRouteImport } from './routes/servicii.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckUpRoute = CheckUpRouteImport.update({
+  id: '/check-up',
+  path: '/check-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContacteRoute = ContacteRouteImport.update({
+  id: '/contacte',
+  path: '/contacte',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DespreClinicaRoute = DespreClinicaRouteImport.update({
+  id: '/despre-clinica',
+  path: '/despre-clinica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GhidulPacientuluiRoute = GhidulPacientuluiRouteImport.update({
+  id: '/ghidul-pacientului',
+  path: '/ghidul-pacientului',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LaboratorRoute = LaboratorRouteImport.update({
+  id: '/laborator',
+  path: '/laborator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MediciRoute = MediciRouteImport.update({
+  id: '/medici',
+  path: '/medici',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoutatiRoute = NoutatiRouteImport.update({
+  id: '/noutati',
+  path: '/noutati',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiciiIndexRoute = ServiciiIndexRouteImport.update({
+  id: '/servicii/',
+  path: '/servicii/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ServiciiSlugRoute = ServiciiSlugRouteImport.update({
+  id: '/servicii/$slug',
+  path: '/servicii/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/check-up': typeof CheckUpRoute
+  '/contacte': typeof ContacteRoute
+  '/despre-clinica': typeof DespreClinicaRoute
+  '/ghidul-pacientului': typeof GhidulPacientuluiRoute
+  '/laborator': typeof LaboratorRoute
+  '/medici': typeof MediciRoute
+  '/noutati': typeof NoutatiRoute
+  '/servicii/$slug': typeof ServiciiSlugRoute
+  '/servicii/': typeof ServiciiIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/check-up': typeof CheckUpRoute
+  '/contacte': typeof ContacteRoute
+  '/despre-clinica': typeof DespreClinicaRoute
+  '/ghidul-pacientului': typeof GhidulPacientuluiRoute
+  '/laborator': typeof LaboratorRoute
+  '/medici': typeof MediciRoute
+  '/noutati': typeof NoutatiRoute
+  '/servicii/$slug': typeof ServiciiSlugRoute
+  '/servicii': typeof ServiciiIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/check-up': typeof CheckUpRoute
+  '/contacte': typeof ContacteRoute
+  '/despre-clinica': typeof DespreClinicaRoute
+  '/ghidul-pacientului': typeof GhidulPacientuluiRoute
+  '/laborator': typeof LaboratorRoute
+  '/medici': typeof MediciRoute
+  '/noutati': typeof NoutatiRoute
+  '/servicii/$slug': typeof ServiciiSlugRoute
+  '/servicii/': typeof ServiciiIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/check-up'
+    | '/contacte'
+    | '/despre-clinica'
+    | '/ghidul-pacientului'
+    | '/laborator'
+    | '/medici'
+    | '/noutati'
+    | '/servicii/$slug'
+    | '/servicii/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/check-up'
+    | '/contacte'
+    | '/despre-clinica'
+    | '/ghidul-pacientului'
+    | '/laborator'
+    | '/medici'
+    | '/noutati'
+    | '/servicii/$slug'
+    | '/servicii'
+  id:
+    | '__root__'
+    | '/'
+    | '/check-up'
+    | '/contacte'
+    | '/despre-clinica'
+    | '/ghidul-pacientului'
+    | '/laborator'
+    | '/medici'
+    | '/noutati'
+    | '/servicii/$slug'
+    | '/servicii/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CheckUpRoute: typeof CheckUpRoute
+  ContacteRoute: typeof ContacteRoute
+  DespreClinicaRoute: typeof DespreClinicaRoute
+  GhidulPacientuluiRoute: typeof GhidulPacientuluiRoute
+  LaboratorRoute: typeof LaboratorRoute
+  MediciRoute: typeof MediciRoute
+  NoutatiRoute: typeof NoutatiRoute
+  ServiciiSlugRoute: typeof ServiciiSlugRoute
+  ServiciiIndexRoute: typeof ServiciiIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +169,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/check-up': {
+      id: '/check-up'
+      path: '/check-up'
+      fullPath: '/check-up'
+      preLoaderRoute: typeof CheckUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contacte': {
+      id: '/contacte'
+      path: '/contacte'
+      fullPath: '/contacte'
+      preLoaderRoute: typeof ContacteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/despre-clinica': {
+      id: '/despre-clinica'
+      path: '/despre-clinica'
+      fullPath: '/despre-clinica'
+      preLoaderRoute: typeof DespreClinicaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ghidul-pacientului': {
+      id: '/ghidul-pacientului'
+      path: '/ghidul-pacientului'
+      fullPath: '/ghidul-pacientului'
+      preLoaderRoute: typeof GhidulPacientuluiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/laborator': {
+      id: '/laborator'
+      path: '/laborator'
+      fullPath: '/laborator'
+      preLoaderRoute: typeof LaboratorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/medici': {
+      id: '/medici'
+      path: '/medici'
+      fullPath: '/medici'
+      preLoaderRoute: typeof MediciRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/noutati': {
+      id: '/noutati'
+      path: '/noutati'
+      fullPath: '/noutati'
+      preLoaderRoute: typeof NoutatiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicii/': {
+      id: '/servicii/'
+      path: '/servicii'
+      fullPath: '/servicii/'
+      preLoaderRoute: typeof ServiciiIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/servicii/$slug': {
+      id: '/servicii/$slug'
+      path: '/servicii/$slug'
+      fullPath: '/servicii/$slug'
+      preLoaderRoute: typeof ServiciiSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CheckUpRoute: CheckUpRoute,
+  ContacteRoute: ContacteRoute,
+  DespreClinicaRoute: DespreClinicaRoute,
+  GhidulPacientuluiRoute: GhidulPacientuluiRoute,
+  LaboratorRoute: LaboratorRoute,
+  MediciRoute: MediciRoute,
+  NoutatiRoute: NoutatiRoute,
+  ServiciiSlugRoute: ServiciiSlugRoute,
+  ServiciiIndexRoute: ServiciiIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
