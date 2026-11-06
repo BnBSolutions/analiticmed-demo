@@ -1,14 +1,12 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import type { ReactNode } from "react";
+import logoAsset from "@/assets/analiticmed-logo.png.asset.json";
 
 export function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2" aria-label="AnaliticMed">
-      <span className="grid size-9 place-items-center rounded-lg bg-primary text-lg font-bold text-primary-foreground">A</span>
-      <span className="text-xl font-bold tracking-tight">
-        Analitic<span className="text-primary">Med</span>
-      </span>
+    <Link to="/" className="flex shrink-0 items-center" aria-label="AnaliticMed">
+      <img src={logoAsset.url} alt="AnaliticMed" width={1730} height={425} className="h-auto w-44 object-contain sm:w-52" />
     </Link>
   );
 }
