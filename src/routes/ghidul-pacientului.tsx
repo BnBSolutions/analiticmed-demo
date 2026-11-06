@@ -1,20 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { CLINIC } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
+import { useSeo, useT } from "@/lib/i18n";
 import { PageHeader, Section } from "@/components/site/ui";
 
-export const Route = createFileRoute("/ghidul-pacientului")({
-  head: ({ match }) =>
-    seo(match.search, "/ghidul-pacientului", {
-      ro: { title: "Ghidul pacientului – programare, pregătire, rezultate | AnaliticMed", desc: "Tot ce trebuie să știți înainte de vizita la AnaliticMed: cum vă programați, cum vă pregătiți pentru investigații și cum primiți rezultatele." },
-      ru: { title: "Гид пациента – запись, подготовка, результаты | AnaliticMed", desc: "Всё, что нужно знать перед визитом в AnaliticMed: как записаться, как подготовиться к исследованиям и как получить результаты." },
-    }),
-  component: Page,
-});
-
-function Page() {
+export function Page() {
   const { ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/ghidul-pacientului", {
+    ro: { title: "Ghidul pacientului – programare, pregătire, rezultate | AnaliticMed", desc: "Tot ce trebuie să știți înainte de vizita la AnaliticMed: cum vă programați, cum vă pregătiți pentru investigații și cum primiți rezultatele." },
+    ru: { title: "Гид пациента – запись, подготовка, результаты | AnaliticMed", desc: "Всё, что нужно знать перед визитом в AnaliticMed: как записаться, как подготовиться к исследованиям и как получить результаты." },
+  });
   const blocks = [
     { id: "programare", h: ru ? "Как записаться" : "Cum vă programați", p: ru ? `Позвоните по номеру ${CLINIC.phone}, напишите на ${CLINIC.email} или оставьте онлайн-заявку. Администратор подтвердит дату и время.` : `Sunați la ${CLINIC.phone}, scrieți la ${CLINIC.email} sau completați cererea online. Administratorul vă confirmă data și ora.` },
     { id: "vizita", h: ru ? "Что взять с собой" : "Ce luați cu dumneavoastră", p: ru ? "Удостоверение личности, направление (если есть), результаты предыдущих исследований и список принимаемых лекарств." : "Actul de identitate, trimiterea (dacă o aveți), rezultatele investigațiilor anterioare și lista medicamentelor pe care le luați." },
@@ -38,7 +33,7 @@ function Page() {
                 <p className="mt-3 leading-relaxed text-muted-foreground">{b.p}</p>
               </section>
             ))}
-            <Link to="/contacte" hash="programare" className="btn-primary">{ui.book}</Link>
+            <Link to="/contacte#programare" className="btn-primary">{ui.book}</Link>
           </div>
         </div>
       </Section>

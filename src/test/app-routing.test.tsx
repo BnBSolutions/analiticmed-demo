@@ -1,17 +1,49 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createRouter, rootRouteId } from "@tanstack/react-router";
+import { cleanup, render } from "@testing-library/react";
+import { afterEach } from "vitest";
+import { matchRoutes, MemoryRouter } from "react-router-dom";
 import { describe, expect, it } from "vitest";
 
-import { routeTree } from "@/routeTree.gen";
+import { routes } from "@/routes";
+import { AppLink } from "@/lib/router";
 
-// Match routes without running loaders or rendering: loaders may need a server or
-// network the test run lacks, and jsdom never loads the stylesheets React waits on.
+afterEach(cleanup);
+
 describe("App routing", () => {
-  it("matches a page for / instead of falling back to not found", () => {
-    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+  it.each([
+    ["/", undefined],
+    ["/check-up", "check-up"],
+    ["/contacte", "contacte"],
+    ["/medici?spec=cardiologie&lang=ru", "medici"],
+    ["/servicii/rmn", "servicii/:slug"],
+    ["/unknown", "*"],
+  ])("matches %s", (path, expectedPath) => {
+    const matches = matchRoutes(routes, path);
+    expect(matches).not.toBeNull();
+    expect(matches?.at(-1)?.route.path).toBe(expectedPath);
+  });
 
-    const matches = router.matchRoutes("/");
+  it("matches a dynamic service slug", () => {
+    const matches = matchRoutes(routes, "/servicii/rmn");
+    expect(matches?.at(-1)?.params["slug"]).toBe("rmn");
+  });
 
-    expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
+  it("preserves the selected language in React Router links", () => {
+    const { getByRole } = render(
+      <MemoryRouter initialEntries={["/servicii?lang=ru"]}>
+        <AppLink to="/servicii/rmn#programare">Book</AppLink>
+        <AppLink to="/medici?spec=cardiologie">Doctors</AppLink>
+        <AppLink to="/servicii" preserveLanguage={false}>
+          Romanian
+        </AppLink>
+      </MemoryRouter>,
+    );
+
+    expect(getByRole("link", { name: "Book" }).getAttribute("href")).toBe(
+      "/servicii/rmn?lang=ru#programare",
+    );
+    expect(getByRole("link", { name: "Doctors" }).getAttribute("href")).toBe(
+      "/medici?spec=cardiologie&lang=ru",
+    );
+    expect(getByRole("link", { name: "Romanian" }).getAttribute("href")).toBe("/servicii");
   });
 });

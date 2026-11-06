@@ -1,23 +1,18 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { CheckCircle2 } from "lucide-react";
 import labImg from "@/assets/lab.jpg";
 import homeImg from "@/assets/home-collection.jpg";
 import { CLINIC } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
+import { useSeo, useT } from "@/lib/i18n";
 import { PageHeader, Section } from "@/components/site/ui";
 
-export const Route = createFileRoute("/laborator")({
-  head: ({ match }) =>
-    seo(match.search, "/laborator", {
-      ro: { title: "Laborator de analize medicale în Bălți – AnaliticMed", desc: "Analize de sânge, urină, hormonale și infecțioase în laboratorul AnaliticMed. Recoltare la domiciliu în Bălți și rezultate rapide." },
-      ru: { title: "Лаборатория медицинских анализов в Бельцах – AnaliticMed", desc: "Анализы крови, мочи, гормоны и инфекции в лаборатории AnaliticMed. Забор анализов на дому в Бельцах и быстрые результаты." },
-    }),
-  component: Page,
-});
-
-function Page() {
+export function Page() {
   const { ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/laborator", {
+    ro: { title: "Laborator de analize medicale în Bălți – AnaliticMed", desc: "Analize de sânge, urină, hormonale și infecțioase în laboratorul AnaliticMed. Recoltare la domiciliu în Bălți și rezultate rapide." },
+    ru: { title: "Лаборатория медицинских анализов в Бельцах – AnaliticMed", desc: "Анализы крови, мочи, гормоны и инфекции в лаборатории AnaliticMed. Забор анализов на дому в Бельцах и быстрые результаты." },
+  });
   const groups = ru
     ? ["Общий анализ крови и мочи", "Биохимия крови", "Гормоны щитовидной железы и половые гормоны", "Онкомаркеры", "Инфекции и серология", "Коагулограмма", "Витамины и микроэлементы", "Аллергологические панели"]
     : ["Hemoleucogramă și sumarul urinei", "Biochimie sanguină", "Hormoni tiroidieni și sexuali", "Markeri tumorali", "Infecții și serologie", "Coagulogramă", "Vitamine și microelemente", "Panouri alergologice"];
@@ -46,7 +41,7 @@ function Page() {
                 <li key={s} className="flex gap-3"><span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary font-bold text-primary-foreground">{k + 1}</span><span className="pt-1">{s}</span></li>
               ))}
             </ol>
-            <Link to="/contacte" hash="programare" className="btn-primary mt-8">{ui.book}</Link>
+            <Link to="/contacte#programare" className="btn-primary mt-8">{ui.book}</Link>
           </div>
           <img src={homeImg} alt={ru ? "Медсестра берёт кровь у пациентки дома" : "Asistentă care recoltează sânge unei paciente acasă"} loading="lazy" width={1200} height={912} className="rounded-2xl" />
         </div>

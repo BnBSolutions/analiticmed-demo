@@ -29,21 +29,12 @@ jobs:
         run: bun run build
         env:
           GH_PAGES_BASE: /${{ github.event.repository.name }}/
-          NITRO_PRESET: node-server
 
       - name: Prepare static output
         run: |
           set -e
-          SHELL_FILE=$(find . -path ./node_modules -prune -o -name "_shell.html" -print | head -1)
-          if [ -z "$SHELL_FILE" ]; then
-            echo "SPA shell not found. HTML files produced:"
-            find . -path ./node_modules -prune -o -name "*.html" -print
-            exit 1
-          fi
-          OUT=$(dirname "$SHELL_FILE")
-          echo "Static output: $OUT"
-          cp "$SHELL_FILE" "$OUT/index.html"
-          cp "$SHELL_FILE" "$OUT/404.html"
+          OUT=dist
+          cp "$OUT/index.html" "$OUT/404.html"
           touch "$OUT/.nojekyll"
           # Logo is stored on the hosted asset store; copy it into the static site.
           LOGO_URL=$(node -p "require('./src/assets/analiticmed-logo.png.asset.json').url")

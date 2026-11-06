@@ -1,21 +1,11 @@
-// @lovable.dev/vite-tanstack-config already includes the following — do NOT add them manually
-// or the app will break with duplicate plugins:
-//   - TanStack devtools (dev-only, first), tanstackStart, viteReact, tailwindcss, tsConfigPaths,
-//     nitro (build-only using cloudflare as a default target), VITE_* env injection, @ path alias,
-//     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
-// You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
-// Set only by the GitHub Pages workflow (.github/workflows/pages.yml) to build a static
-// demo under /<repo-name>/. Normal builds (Lovable, local) are unaffected.
-const ghPagesBase = process.env.GH_PAGES_BASE;
+const ghPagesBase = process.env["GH_PAGES_BASE"];
 
 export default defineConfig({
-  tanstackStart: {
-    // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
-    // nitro/vite builds from this
-    server: { entry: "server" },
-    ...(ghPagesBase ? { spa: { enabled: true } } : {}),
-  },
-  ...(ghPagesBase ? { vite: { base: ghPagesBase } } : {}),
+  base: ghPagesBase || "/",
+  plugins: [react(), tailwindcss()],
+  resolve: { tsconfigPaths: true },
 });

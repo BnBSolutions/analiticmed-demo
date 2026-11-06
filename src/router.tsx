@@ -1,17 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createRouter } from "@tanstack/react-router";
-import { routeTree } from "./routeTree.gen";
+import { createBrowserRouter } from "react-router-dom";
+import { routes } from "./routes";
 
-export const getRouter = () => {
-  const queryClient = new QueryClient();
-
-  const router = createRouter({
-    routeTree,
-    basepath: import.meta.env.BASE_URL,
-    context: { queryClient },
-    scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
-  });
-
-  return router;
-};
+export const router = createBrowserRouter(routes, {
+  basename: import.meta.env.BASE_URL,
+});

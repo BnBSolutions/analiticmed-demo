@@ -1,41 +1,48 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useParams } from "react-router-dom";
+import { AppLink as Link } from "@/lib/router";
 import { CheckCircle2, Clock, Phone } from "lucide-react";
 import { CLINIC, diagnostics } from "@/data/site";
-import { langOf, seo, SITE_URL, useT } from "@/lib/i18n";
+import { SITE_URL, useSeo, useT } from "@/lib/i18n";
 import { PageHeader, Section } from "@/components/site/ui";
 import { BookingForm } from "@/components/site/BookingForm";
 
-export const Route = createFileRoute("/servicii/$slug")({
-  loader: ({ params }) => {
-    const d = diagnostics.find((x) => x.slug === params.slug);
-    if (!d) throw notFound();
-    return { slug: d.slug };
-  },
-  head: ({ match, params }) => {
-    const d = diagnostics.find((x) => x.slug === params.slug);
-    if (!d) return { meta: [{ title: "Serviciu indisponibil – AnaliticMed" }, { name: "robots", content: "noindex" }] };
-    const lang = langOf(match.search);
-    return seo(match.search, `/servicii/${d.slug}`, {
-      ro: { title: `${d.name.ro} în Bălți – AnaliticMed`, desc: `${d.short.ro}. Pregătire, durată și programare la ${d.name.ro} în clinica AnaliticMed din Bălți.` },
-      ru: { title: `${d.name.ru} в Бельцах – AnaliticMed`, desc: `${d.short.ru}. Подготовка, длительность и запись на ${d.name.ru} в клинике AnaliticMed в Бельцах.` },
-    }, {
-      "@context": "https://schema.org",
-      "@type": "MedicalProcedure",
-      name: d.name[lang],
-      description: d.desc[lang],
-      preparation: d.prep.map((p) => p[lang]).join("; "),
-      url: `${SITE_URL}/servicii/${d.slug}`,
-      provider: { "@type": "MedicalClinic", name: "AnaliticMed", telephone: "+37362000020" },
-    });
-  },
-  component: Page,
-});
-
-function Page() {
-  const { slug } = Route.useLoaderData();
-  const d = diagnostics.find((x) => x.slug === slug)!;
+export function Page() {
+  const { slug } = useParams();
   const { t, ui, lang } = useT();
   const ru = lang === "ru";
+  const d = diagnostics.find((x) => x.slug === slug);
+  useSeo(
+    d ? `/servicii/${d.slug}` : "/servicii",
+    d
+      ? {
+          ro: { title: `${d.name.ro} în Bălți – AnaliticMed`, desc: `${d.short.ro}. Pregătire, durată și programare la ${d.name.ro} în clinica AnaliticMed din Bălți.` },
+          ru: { title: `${d.name.ru} в Бельцах – AnaliticMed`, desc: `${d.short.ru}. Подготовка, длительность и запись на ${d.name.ru} в клинике AnaliticMed в Бельцах.` },
+        }
+      : {
+          ro: { title: "Serviciu indisponibil – AnaliticMed", desc: "" },
+          ru: { title: "Услуга недоступна – AnaliticMed", desc: "" },
+        },
+    d
+      ? {
+          "@context": "https://schema.org",
+          "@type": "MedicalProcedure",
+          name: d.name[lang],
+          description: d.desc[lang],
+          preparation: d.prep.map((p) => p[lang]).join("; "),
+          url: `${SITE_URL}/servicii/${d.slug}`,
+          provider: { "@type": "MedicalClinic", name: "AnaliticMed", telephone: "+37362000020" },
+        }
+      : undefined,
+  );
+  if (!d) {
+    return (
+      <div className="container-site py-20 text-center">
+        <h1 className="text-4xl font-bold">404</h1>
+        <p className="mt-3 text-muted-foreground">{ru ? "Услуга не найдена." : "Serviciul nu a fost găsit."}</p>
+        <Link to="/servicii" className="btn-primary mt-6">{ui.allServices}</Link>
+      </div>
+    );
+  }
   const faq = [
     { q: ru ? "Нужно ли направление?" : "Am nevoie de trimitere?", a: ru ? "Направление не обязательно, но желательно – оно помогает врачу точнее провести исследование." : "Trimiterea nu este obligatorie, dar este recomandată – ajută medicul să efectueze investigația mai precis." },
     { q: ru ? "Когда я получу результат?" : "Când primesc rezultatul?", a: ru ? "Обычно заключение готово в день исследования или на следующий рабочий день." : "De obicei, concluzia este gata în ziua investigației sau în următoarea zi lucrătoare." },
@@ -82,7 +89,7 @@ function Page() {
               <p className="mt-1 font-semibold">{ru ? "Уточняйте по телефону – зависит от зоны исследования" : "Se confirmă telefonic – depinde de zona investigată"}</p>
             </div>
             <a href={CLINIC.phoneHref} className="btn-outline w-full"><Phone className="size-4" />{CLINIC.phone}</a>
-            <Link to="/servicii/$slug" params={{ slug }} hash="programare" className="btn-primary w-full">{ui.book}</Link>
+            <Link to={`/servicii/${encodeURIComponent(d.slug)}#programare`} className="btn-primary w-full">{ui.book}</Link>
           </aside>
         </div>
       </Section>

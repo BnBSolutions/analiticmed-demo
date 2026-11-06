@@ -1,4 +1,5 @@
-import { useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 export type Lang = "ro" | "ru";
 export type L = { ro: string; ru: string };
@@ -6,11 +7,20 @@ export type L = { ro: string; ru: string };
 export const SITE_URL = "https://analiticmed.md";
 
 export function langOf(search: unknown): Lang {
+  if (search instanceof URLSearchParams) {
+    return search.get("lang") === "ru" ? "ru" : "ro";
+  }
+  if (typeof search === "string") {
+    return new URLSearchParams(search.startsWith("?") ? search.slice(1) : search).get("lang") ===
+      "ru"
+      ? "ru"
+      : "ro";
+  }
   return (search as { lang?: string } | undefined)?.lang === "ru" ? "ru" : "ro";
 }
 
 export function useLang(): Lang {
-  return useRouterState({ select: (s) => langOf(s.location.search) });
+  return langOf(useLocation().search);
 }
 
 export const tr = (l: L, lang: Lang) => l[lang];
@@ -49,10 +59,56 @@ export function seo(
       { rel: "alternate", hrefLang: "ru", href: ru },
       { rel: "alternate", hrefLang: "x-default", href: ro },
     ],
-    scripts: jsonLd
-      ? [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }]
-      : [],
+    scripts: jsonLd ? [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }] : [],
   };
+}
+
+export function useSeo(
+  path: string,
+  content: Seo,
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[],
+) {
+  const { search } = useLocation();
+
+  useEffect(() => {
+    const data = seo(search, path, content, jsonLd);
+    const title = data.meta.find((meta) => "title" in meta);
+    if (title && "title" in title) {
+      document.title = title.title;
+    }
+
+    document.querySelectorAll("[data-route-seo]").forEach((element) => element.remove());
+    for (const meta of data.meta) {
+      if (!("title" in meta)) {
+        const element = document.createElement("meta");
+        for (const [key, value] of Object.entries(meta)) {
+          if (key !== "title" && typeof value === "string") {
+            element.setAttribute(key, value);
+          }
+        }
+        element.dataset["routeSeo"] = "true";
+        document.head.append(element);
+      }
+    }
+    for (const link of data.links) {
+      const element = document.createElement("link");
+      for (const [key, value] of Object.entries(link)) {
+        if (typeof value === "string") {
+          element.setAttribute(key === "hrefLang" ? "hreflang" : key, value);
+        }
+      }
+      element.dataset["routeSeo"] = "true";
+      document.head.append(element);
+    }
+    for (const script of data.scripts) {
+      const element = document.createElement("script");
+      element.type = script.type;
+      element.textContent = script.children;
+      element.dataset["routeSeo"] = "true";
+      document.head.append(element);
+    }
+    document.documentElement.lang = langOf(search);
+  });
 }
 
 export const ui = {

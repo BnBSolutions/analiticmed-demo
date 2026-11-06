@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
 import { CLINIC, diagnostics } from "@/data/site";
 import { useT } from "@/lib/i18n";
@@ -26,7 +26,7 @@ export function Footer() {
         </div>
         <FooterCol title={ui.services}>
           {diagnostics.slice(0, 5).map((d) => (
-            <Link key={d.slug} to="/servicii/$slug" params={{ slug: d.slug }} className="hover:text-primary">{t(d.name)}</Link>
+            <Link key={d.slug} to={`/servicii/${encodeURIComponent(d.slug)}`} className="hover:text-primary">{t(d.name)}</Link>
           ))}
           <Link to="/servicii" className="hover:text-primary">{ui.allServices}</Link>
         </FooterCol>
@@ -34,7 +34,7 @@ export function Footer() {
           <Link to="/ghidul-pacientului" className="hover:text-primary">{ui.guide}</Link>
           <Link to="/laborator" className="hover:text-primary">{ui.lab}</Link>
           <Link to="/check-up" className="hover:text-primary">{ui.checkup}</Link>
-          <Link to="/contacte" hash="programare" className="hover:text-primary">{ui.book}</Link>
+          <Link to="/contacte#programare" className="hover:text-primary">{ui.book}</Link>
         </FooterCol>
         <FooterCol title={ui.about}>
           <Link to="/despre-clinica" className="hover:text-primary">{ui.about}</Link>
@@ -43,9 +43,9 @@ export function Footer() {
           <Link to="/contacte" className="hover:text-primary">{ui.contacts}</Link>
         </FooterCol>
         <FooterCol title={ru ? "Правовая информация" : "Informații legale"}>
-          <Link to="/ghidul-pacientului" hash="drepturi" className="hover:text-primary">{ru ? "Права пациента" : "Drepturile pacientului"}</Link>
-          <Link to="/ghidul-pacientului" hash="date-personale" className="hover:text-primary">{ru ? "Защита персональных данных" : "Protecția datelor personale"}</Link>
-          <Link to="/despre-clinica" hash="licenta" className="hover:text-primary">{ru ? "Лицензия и реквизиты" : "Licență și rechizite"}</Link>
+          <Link to="/ghidul-pacientului#drepturi" className="hover:text-primary">{ru ? "Права пациента" : "Drepturile pacientului"}</Link>
+          <Link to="/ghidul-pacientului#date-personale" className="hover:text-primary">{ru ? "Защита персональных данных" : "Protecția datelor personale"}</Link>
+          <Link to="/despre-clinica#licenta" className="hover:text-primary">{ru ? "Лицензия и реквизиты" : "Licență și rechizite"}</Link>
         </FooterCol>
       </div>
       <div className="border-t">

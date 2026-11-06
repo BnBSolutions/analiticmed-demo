@@ -1,23 +1,18 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { HeartPulse, Microscope, ShieldCheck, Users } from "lucide-react";
 import heroMri from "@/assets/hero-mri.jpg";
 import { CLINIC } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
+import { useSeo, useT } from "@/lib/i18n";
 import { clinicSchema } from "@/lib/schema";
 import { PageHeader, Section } from "@/components/site/ui";
 
-export const Route = createFileRoute("/despre-clinica")({
-  head: ({ match }) =>
-    seo(match.search, "/despre-clinica", {
-      ro: { title: "Despre clinica AnaliticMed din Bălți", desc: "AnaliticMed este o clinică medicală privată și laborator de diagnostic din Bălți: echipamente moderne, medici cu experiență și grijă pentru fiecare pacient." },
-      ru: { title: "О клинике AnaliticMed в Бельцах", desc: "AnaliticMed – частная медицинская клиника и диагностическая лаборатория в Бельцах: современное оборудование, опытные врачи и забота о каждом пациенте." },
-    }, clinicSchema),
-  component: Page,
-});
-
-function Page() {
+export function Page() {
   const { t, ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/despre-clinica", {
+    ro: { title: "Despre clinica AnaliticMed din Bălți", desc: "AnaliticMed este o clinică medicală privată și laborator de diagnostic din Bălți: echipamente moderne, medici cu experiență și grijă pentru fiecare pacient." },
+    ru: { title: "О клинике AnaliticMed в Бельцах", desc: "AnaliticMed – частная медицинская клиника и диагностическая лаборатория в Бельцах: современное оборудование, опытные врачи и забота о каждом пациенте." },
+  }, clinicSchema);
   const values = [
     { icon: Microscope, h: ru ? "Современная диагностика" : "Diagnostică modernă", p: ru ? "МРТ, КТ, цифровой рентген, УЗИ, ЭЭГ, спирометрия и денситометрия." : "RMN, CT, radiografie digitală, ecografie, EEG, spirometrie și osteodensitometrie." },
     { icon: Users, h: ru ? "Опытные врачи" : "Medici cu experiență", p: ru ? "Более 20 специальностей для взрослых и детей." : "Peste 20 de specialități pentru adulți și copii." },

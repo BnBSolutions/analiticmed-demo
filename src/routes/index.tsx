@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { CalendarCheck, ChevronLeft, ChevronRight, FileText, FlaskConical, Home, Quote } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import heroMri from "@/assets/hero-mri.jpg";
@@ -6,23 +6,18 @@ import labImg from "@/assets/lab.jpg";
 import homeImg from "@/assets/home-collection.jpg";
 import checkupImg from "@/assets/checkup.jpg";
 import { articles, CLINIC, diagnostics, doctors, reviews, specialties } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
+import { useSeo, useT } from "@/lib/i18n";
 import { clinicSchema } from "@/lib/schema";
 import { Arrow, Section, SectionTitle } from "@/components/site/ui";
 import { BookingForm } from "@/components/site/BookingForm";
 
-export const Route = createFileRoute("/")({
-  head: ({ match }) =>
-    seo(match.search, "/", {
-      ro: { title: "AnaliticMed Bălți – clinică medicală și laborator de diagnostic", desc: "RMN, CT, ecografie, analize de laborator și consultații la peste 20 de specialități în Bălți. Programare online și recoltare la domiciliu." },
-      ru: { title: "AnaliticMed Бельцы – медицинская клиника и лаборатория", desc: "МРТ, КТ, УЗИ, лабораторные анализы и консультации более 20 специалистов в Бельцах. Онлайн-запись и забор анализов на дому." },
-    }, clinicSchema),
-  component: Index,
-});
-
-function Index() {
+export function Index() {
   const { t, ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/", {
+    ro: { title: "AnaliticMed Bălți – clinică medicală și laborator de diagnostic", desc: "RMN, CT, ecografie, analize de laborator și consultații la peste 20 de specialități în Bălți. Programare online și recoltare la domiciliu." },
+    ru: { title: "AnaliticMed Бельцы – медицинская клиника и лаборатория", desc: "МРТ, КТ, УЗИ, лабораторные анализы и консультации более 20 специалистов в Бельцах. Онлайн-запись и забор анализов на дому." },
+  }, clinicSchema);
   return (
     <>
       <Hero />
@@ -31,12 +26,12 @@ function Index() {
       <div className="container-site -mt-2 md:-mt-8 relative z-10">
         <div className="grid grid-cols-2 gap-3 rounded-xl border bg-card p-3 shadow-soft md:grid-cols-4 md:p-4">
           {[
-            { icon: CalendarCheck, label: ru ? "Онлайн-запись" : "Programare online", to: "/contacte" as const, hash: "programare" },
+            { icon: CalendarCheck, label: ru ? "Онлайн-запись" : "Programare online", to: "/contacte#programare" as const },
             { icon: FlaskConical, label: ru ? "Лабораторные анализы" : "Analize de laborator", to: "/laborator" as const },
-            { icon: Home, label: ui.homeTests, to: "/laborator" as const, hash: "domiciliu" },
-            { icon: FileText, label: ru ? "Результаты анализов" : "Rezultatele analizelor", to: "/ghidul-pacientului" as const, hash: "rezultate" },
+            { icon: Home, label: ui.homeTests, to: "/laborator#domiciliu" as const },
+            { icon: FileText, label: ru ? "Результаты анализов" : "Rezultatele analizelor", to: "/ghidul-pacientului#rezultate" as const },
           ].map((a) => (
-            <Link key={a.label} to={a.to} {...(a.hash ? { hash: a.hash } : {})} className="group flex items-center gap-3 rounded-lg p-3 transition hover:bg-accent">
+            <Link key={a.label} to={a.to} className="group flex items-center gap-3 rounded-lg p-3 transition hover:bg-accent">
               <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-tint text-primary-dark"><a.icon className="size-5" /></span>
               <span className="text-sm font-semibold leading-tight">{a.label}</span>
             </Link>
@@ -48,7 +43,7 @@ function Index() {
         <SectionTitle title={ru ? "Функциональная диагностика" : "Diagnostică funcțională"} sub={ru ? "Современное оборудование и опытные врачи-диагносты" : "Echipamente moderne și medici imagiști cu experiență"} />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {diagnostics.map((d) => (
-            <Link key={d.slug} to="/servicii/$slug" params={{ slug: d.slug }} className="card-link group items-start">
+            <Link key={d.slug} to={`/servicii/${encodeURIComponent(d.slug)}`} className="card-link group items-start">
               <div>
                 <h3 className="font-bold">{t(d.name)}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{t(d.short)}</p>
@@ -66,7 +61,7 @@ function Index() {
         />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {specialties.map((s) => (
-            <Link key={s.slug} to="/medici" search={{ spec: s.slug }} className="card-link group py-4">
+            <Link key={s.slug} to={`/medici?spec=${encodeURIComponent(s.slug)}`} className="card-link group py-4">
               <span className="font-semibold">{t(s.name)}</span>
               <Arrow />
             </Link>
@@ -101,7 +96,7 @@ function Index() {
               <div className="p-4">
                 <h3 className="font-bold">{t(d.title)}</h3>
                 <p className="text-sm text-muted-foreground">{t(specialties.find((s) => s.slug === d.spec)!.name)}</p>
-                <Link to="/contacte" hash="programare" className="btn-outline mt-4 w-full py-2">{ui.bookShort}</Link>
+                <Link to="/contacte#programare" className="btn-outline mt-4 w-full py-2">{ui.bookShort}</Link>
               </div>
             </article>
           ))}
@@ -131,7 +126,7 @@ function Index() {
         <SectionTitle title={ui.news} action={<Link to="/noutati" className="font-semibold text-primary-dark hover:text-primary">{ru ? "Все статьи" : "Toate articolele"} →</Link>} />
         <div className="grid gap-6 md:grid-cols-3">
           {articles.map((a) => (
-            <Link key={a.id} to="/noutati" hash={a.id} className="group overflow-hidden rounded-xl border bg-card transition hover:shadow-soft">
+            <Link key={a.id} to={`/noutati#${a.id}`} className="group overflow-hidden rounded-xl border bg-card transition hover:shadow-soft">
               <img src={a.image} alt={t(a.alt)} loading="lazy" width={1200} height={912} className="aspect-[16/10] w-full object-cover" />
               <div className="p-5">
                 <time dateTime={a.date} className="text-xs font-medium text-muted-foreground">{new Date(a.date).toLocaleDateString(ru ? "ru-RU" : "ro-RO", { day: "numeric", month: "long", year: "numeric" })}</time>
@@ -195,8 +190,8 @@ function Hero() {
           {i === 0 ? <h1 className="text-3xl leading-tight md:text-5xl">{s.title}</h1> : <p className="text-3xl font-bold leading-tight md:text-5xl">{s.title}</p>}
           <p className="mt-4 max-w-md text-lg opacity-90">{s.sub}</p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/contacte" hash="programare" className="btn-light">{ui.book}</Link>
-            <Link to="/laborator" hash="domiciliu" className="btn-ghost-light">{ui.homeTests}</Link>
+            <Link to="/contacte#programare" className="btn-light">{ui.book}</Link>
+            <Link to="/laborator#domiciliu" className="btn-ghost-light">{ui.homeTests}</Link>
           </div>
           <div className="mt-10 flex gap-2" role="tablist">
             {slides.map((_, k) => (

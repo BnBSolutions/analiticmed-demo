@@ -29,7 +29,7 @@ use the editor.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
 
-- Language is a `?lang=ru` search param (Romanian default), retained by the root route's search middleware; every route's head uses `seo()` from src/lib/i18n.ts for hreflang + unique meta. Why: one route tree serves both languages with crawlable URLs.
+- Language is a `?lang=ru` search param (Romanian default), retained by internal links; route components use `useSeo()` from src/lib/i18n.ts for hreflang + unique meta. Why: one React Router tree serves both languages with crawlable URLs.
 - Clinic content lives in src/data/site.ts as `{ro, ru}` pairs. Why: single source for both languages.
 - Header and footer share the uploaded logo through the Logo component; the favicon uses its medical symbol. Why: keep clinic branding consistent across placements.
 - Booking doctor identities and explicit service assignments live in site data; filter by these assignments and clear the selection on service changes. Why: prevent unrelated or stale doctor preferences.

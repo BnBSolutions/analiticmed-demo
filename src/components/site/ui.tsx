@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/lib/router";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import logoAsset from "@/assets/analiticmed-logo.png.asset.json";

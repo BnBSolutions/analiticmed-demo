@@ -1,23 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useSeo, useT } from "@/lib/i18n";
 import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { CLINIC } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
 import { clinicSchema } from "@/lib/schema";
 import { PageHeader, Section } from "@/components/site/ui";
 import { BookingForm } from "@/components/site/BookingForm";
 
-export const Route = createFileRoute("/contacte")({
-  head: ({ match }) =>
-    seo(match.search, "/contacte", {
-      ro: { title: "Contacte și programare – AnaliticMed Bălți", desc: "Telefon 0 620 00 020, e-mail clinica@analiticmed.md, program de lucru și hartă. Programați-vă online la clinica AnaliticMed din Bălți." },
-      ru: { title: "Контакты и запись – AnaliticMed Бельцы", desc: "Телефон 0 620 00 020, e-mail clinica@analiticmed.md, часы работы и карта. Онлайн-запись в клинику AnaliticMed в Бельцах." },
-    }, clinicSchema),
-  component: Page,
-});
-
-function Page() {
+export function Page() {
   const { t, ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/contacte", {
+    ro: { title: "Contacte și programare – AnaliticMed Bălți", desc: "Telefon 0 620 00 020, e-mail clinica@analiticmed.md, program de lucru și hartă. Programați-vă online la clinica AnaliticMed din Bălți." },
+    ru: { title: "Контакты и запись – AnaliticMed Бельцы", desc: "Телефон 0 620 00 020, e-mail clinica@analiticmed.md, часы работы и карта. Онлайн-запись в клинику AnaliticMed в Бельцах." },
+  }, clinicSchema);
   return (
     <>
       <PageHeader crumb={ui.contacts} title={ru ? "Контакты клиники" : "Contactele clinicii"} />

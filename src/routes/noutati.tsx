@@ -1,20 +1,14 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { articles } from "@/data/site";
-import { seo, useT } from "@/lib/i18n";
+import { useSeo, useT } from "@/lib/i18n";
 import { PageHeader, Section } from "@/components/site/ui";
 
-export const Route = createFileRoute("/noutati")({
-  head: ({ match }) =>
-    seo(match.search, "/noutati", {
-      ro: { title: "Noutăți și articole despre sănătate – AnaliticMed", desc: "Sfaturi medicale de la specialiștii AnaliticMed: pregătirea pentru analize, diferența dintre RMN și CT, importanța check-up-ului anual." },
-      ru: { title: "Новости и статьи о здоровье – AnaliticMed", desc: "Советы специалистов AnaliticMed: подготовка к анализам, разница между МРТ и КТ, важность ежегодного check-up." },
-    }),
-  component: Page,
-});
-
-function Page() {
+export function Page() {
   const { t, ui, lang } = useT();
   const ru = lang === "ru";
+  useSeo("/noutati", {
+    ro: { title: "Noutăți și articole despre sănătate – AnaliticMed", desc: "Sfaturi medicale de la specialiștii AnaliticMed: pregătirea pentru analize, diferența dintre RMN și CT, importanța check-up-ului anual." },
+    ru: { title: "Новости и статьи о здоровье – AnaliticMed", desc: "Советы специалистов AnaliticMed: подготовка к анализам, разница между МРТ и КТ, важность ежегодного check-up." },
+  });
   return (
     <>
       <PageHeader crumb={ui.news} title={ru ? "Новости и статьи о здоровье" : "Noutăți și articole despre sănătate"} />

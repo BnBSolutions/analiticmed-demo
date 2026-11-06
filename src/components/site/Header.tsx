@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { AppLink as Link, AppNavLink, useAppNavigate } from "@/lib/router";
 import { ChevronDown, Menu, Phone, Search, X } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { CLINIC, diagnostics, specialties } from "@/data/site";
 import { useT } from "@/lib/i18n";
 import { Logo } from "./ui";
@@ -40,7 +41,7 @@ export function Header() {
         <a href={CLINIC.phoneHref} className="rounded-md p-2 text-primary lg:hidden" aria-label={CLINIC.phone}>
           <Phone className="size-5" />
         </a>
-        <Link to="/contacte" hash="programare" className="btn-primary hidden lg:inline-flex">
+        <Link to="/contacte#programare" className="btn-primary hidden lg:inline-flex">
           {ui.book}
         </Link>
       </div>
@@ -54,7 +55,7 @@ export function Header() {
             <div className="invisible absolute left-0 top-full z-50 w-[560px] pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100">
               <div className="grid grid-cols-2 gap-1 rounded-xl border bg-popover p-3 shadow-soft">
                 {diagnostics.map((d) => (
-                  <Link key={d.slug} to="/servicii/$slug" params={{ slug: d.slug }} className="rounded-md px-3 py-2 hover:bg-accent hover:text-accent-foreground">
+                  <Link key={d.slug} to={`/servicii/${encodeURIComponent(d.slug)}`} className="rounded-md px-3 py-2 hover:bg-accent hover:text-accent-foreground">
                     {t(d.name)}
                   </Link>
                 ))}
@@ -65,16 +66,16 @@ export function Header() {
             </div>
           </div>
           {nav.map((n) => (
-            <Link key={n.to} to={n.to} className="hover:text-primary" activeProps={{ className: "text-primary" }}>
+            <AppNavLink key={n.to} to={n.to} className={({ isActive }) => `hover:text-primary ${isActive ? "text-primary" : ""}`}>
               {n.label}
-            </Link>
+            </AppNavLink>
           ))}
           <LangSwitch className="ml-auto" />
         </div>
       </nav>
 
       <div className="border-t p-3 lg:hidden">
-        <Link to="/contacte" hash="programare" className="btn-primary w-full">
+        <Link to="/contacte#programare" className="btn-primary w-full">
           {ui.book}
         </Link>
       </div>
@@ -104,12 +105,19 @@ export function Header() {
 
 function LangSwitch({ className = "" }: { className?: string }) {
   const { lang } = useT();
+  const location = useLocation();
+  const roSearch = new URLSearchParams(location.search);
+  roSearch.delete("lang");
+  const ruSearch = new URLSearchParams(location.search);
+  ruSearch.set("lang", "ru");
+  const roTo = `${location.pathname}${roSearch.size ? `?${roSearch}` : ""}`;
+  const ruTo = `${location.pathname}?${ruSearch}`;
   return (
     <div className={`flex items-center gap-1 text-sm font-semibold ${className}`}>
-      <Link to="." search={(p: Record<string, unknown>) => ({ ...p, lang: undefined })} hrefLang="ro" className={`rounded px-2 py-1 ${lang === "ro" ? "bg-primary text-primary-foreground" : "hover:text-primary"}`}>
+      <Link to={roTo} preserveLanguage={false} hrefLang="ro" className={`rounded px-2 py-1 ${lang === "ro" ? "bg-primary text-primary-foreground" : "hover:text-primary"}`}>
         RO
       </Link>
-      <Link to="." search={(p: Record<string, unknown>) => ({ ...p, lang: "ru" as const })} hrefLang="ru" className={`rounded px-2 py-1 ${lang === "ru" ? "bg-primary text-primary-foreground" : "hover:text-primary"}`}>
+      <Link to={ruTo} preserveLanguage={false} hrefLang="ru" className={`rounded px-2 py-1 ${lang === "ru" ? "bg-primary text-primary-foreground" : "hover:text-primary"}`}>
         RU
       </Link>
     </div>
@@ -119,16 +127,16 @@ function LangSwitch({ className = "" }: { className?: string }) {
 function SiteSearch() {
   const { ui, t, lang } = useT();
   const [q, setQ] = useState("");
-  const navigate = useNavigate();
+  const navigate = useAppNavigate();
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
     if (s.length < 2) return [];
     const items = [
-      ...diagnostics.map((d) => ({ label: t(d.name), go: () => navigate({ to: "/servicii/$slug", params: { slug: d.slug } }) })),
-      ...specialties.map((sp) => ({ label: t(sp.name), go: () => navigate({ to: "/medici", search: { spec: sp.slug } }) })),
-      { label: ui.lab, go: () => navigate({ to: "/laborator" }) },
-      { label: ui.homeTests, go: () => navigate({ to: "/laborator" }) },
-      { label: ui.checkup, go: () => navigate({ to: "/check-up" }) },
+      ...diagnostics.map((d) => ({ label: t(d.name), go: () => navigate(`/servicii/${encodeURIComponent(d.slug)}`) })),
+      ...specialties.map((sp) => ({ label: t(sp.name), go: () => navigate({ pathname: "/medici", search: `?spec=${encodeURIComponent(sp.slug)}` }) })),
+      { label: ui.lab, go: () => navigate("/laborator") },
+      { label: ui.homeTests, go: () => navigate("/laborator") },
+      { label: ui.checkup, go: () => navigate("/check-up") },
     ];
     return items.filter((i) => i.label.toLowerCase().includes(s)).slice(0, 8);
   }, [q, t, ui, navigate, lang]);
